@@ -2,10 +2,11 @@
 title: "R Graphs"
 output:
   html_notebook:
+    code_folding: none
     df_print: paged
-    code_folding: none # 禁用代码折叠
-    theme: "yeti"
-    toc: true
+    number_sections: yes
+    theme: yeti
+    toc: yes
 ---
 
 ```{r include=FALSE}
@@ -34,8 +35,10 @@ kable(dose_table) %>%
 
 绘制散点图并连线：
 
+* 使用 `plot()` 方法
+* 第一个参数是 x，第二个参数是 y。参数 type="b" 意思是同时绘制点和线。
+
 ```{r basic-plot}
-# 第一个参数是 x，第二个参数是 y。参数 type="b" 意思是同时绘制点和线。
 plot(dose, drugA, type="b")
 ```
 
@@ -47,10 +50,11 @@ Use command `help(plot)` to learn more about `plot()`。
 
 使用 `par()` 查看和配置图表参数。
 
+* 用参数 no.readonly = TRUE 查看可编辑的图标参数
+* 用变量 opar: Original params 来备份初始配置
+
 ```{r view-editable-par}
-# 用参数 no.readonly = TRUE 查看可编辑的图标参数
 opar <- par(no.readonly = TRUE)
-# opar: Original params. 用它储存初始配置
 opar[1:2]
 ```
 
@@ -76,7 +80,7 @@ kable(line_and_symbel_table) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-## COLORS
+## Colors
 
 ### Color Params in Graph
 
@@ -131,13 +135,15 @@ barplot(rep(1,n), col=mycolors)
 
 ### Font Size
 
+在 `par()` 中传入以下参数和值，或直接传入绘图方法中。
+
 * `cex` 基础文字大小倍数
 * `cex.axis` 轴文字字号倍数，相对 `cex`，下同
 * `cex.lab` 轴标签字号倍数
 * `cex.main` 主标题字号倍数
 * `cex.sub` 副标题字号倍数
 
-### Font Style and Font Family
+### Font Style
 
 * `font` 基础文字粗细，=1 正常，=2 加粗，=3 意大利斜体，=4 粗斜体，=5点阵字体(Adobe)
 * `font.axis` 轴文字
@@ -145,4 +151,80 @@ barplot(rep(1,n), col=mycolors)
 * `font.main` 主标题
 * `font.sub` 副标题
 * `ps` Font point size
-* `family` 
+
+### Font Family
+
+* `family` 字体
+
+Windows 中字体名和具体名称之间有一个 map 的对应关系。
+
+使用已知对应字体，可以直接将 `family` 值设置为字体名:
+
+```{r font-family, eval=FALSE}
+par(family="serif")
+```
+
+使用新字体，需要用 `windowsFont()` 方法构建 map 关系：
+
+```{r font-family-mapping-in-windows ,eval=FALSE}
+windowsFonts(
+  A=windowsFont("Arial Black"),
+  B=windowsFont("Bookman Old Style"),
+  C=windowsFont("Comic Sans MS")
+)
+# 将图表字体设置为 Arial Black
+par(family = "A")
+```
+
+可以使用 `names()` 方法查看可用字体。
+
+```{r view-avaliable-font-families, eval=FALSE}
+# PDF 字体
+names(pdfFonts())
+# 生成 pdf
+pdf(file="myplot.pdf", family = "fontname")
+# PostScript Format 字体
+names(postscriptFonts())
+# 生成 PSF
+postscript(file = "myplot.ps", family = "fontname")
+```
+
+## Height, Width and Margin
+
+* `pin` 传入向量，分别为宽和高
+* `mai` margin，图表的外边距，单位是 inches，顺序是 `c(bottom, left, top, right)`
+* `mar` margin，图表的外边距，单位是行，顺序同上
+
+```{r height-width-and-margin, eval=FALSE}
+# 4 inch 宽，3 inch 高，上下边距为 1 inch，0.2 inch 右边距，0.5 inch 左边距
+par(pin = c(4,3), mai = c(1, .5, 1, .2))
+```
+
+## Mixed Example
+
+配置：
+
+  1. 宽 =2 和高 =3
+  1. 线粗2倍，点变大1.5倍
+  1. 轴文字 0.75 倍，斜体
+  1. 点线样式在绘图函数中直接配置
+
+```{r mixed-example-gen-data-and-config}
+dose <- c(20, 30, 40, 45, 60)
+drugA <- c(16, 20, 27, 40, 60)
+drugB <- c(15, 18, 25, 31, 40)
+
+opar <- par(no.readonly=TRUE)
+
+# 1
+par(pin=c(2,3))
+# 2
+par(lwd=2, cex=1.5)
+# 3
+par(cex.axis=.75, font.axis=3)
+# 4-1
+plot(dose, drugA, type="b", pch=19, lty=2, col="red")
+# 4-2
+plot(dose, drugB, type="b", pch=23, lty=6, col="blue", bg="green")
+par(opar)
+```
