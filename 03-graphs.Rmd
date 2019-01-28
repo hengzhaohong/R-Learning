@@ -1,0 +1,148 @@
+---
+title: "R Graphs"
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: none # 禁用代码折叠
+    theme: "yeti"
+    toc: true
+---
+
+```{r include=FALSE}
+library(knitr)
+library(kableExtra)
+```
+
+# DATA SOURCE
+
+研究病人对两种药物 A and B 的不同剂量的反应，首先生成数据：
+
+```{r gen-data, results='hide'}
+# 药物剂量
+dose <- c(20, 30, 40, 50, 60)
+drugA <- c(16, 20, 27, 40, 60)
+drugB <- c(15, 18, 25, 31, 40)
+dose_table <- data.frame(dose, drugA, drugB)
+```
+
+```{r tables-dose-table, echo=FALSE, results='asis'}
+kable(dose_table) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"), full_width = F, position = "left")
+```
+
+# BASIC PLOT
+
+绘制散点图并连线：
+
+```{r basic-plot}
+# 第一个参数是 x，第二个参数是 y。参数 type="b" 意思是同时绘制点和线。
+plot(dose, drugA, type="b")
+```
+
+Use command `help(plot)` to learn more about `plot()`。
+
+# CONFIGURATION
+
+## Method 1: `par()`
+
+使用 `par()` 查看和配置图表参数。
+
+```{r view-editable-par}
+# 用参数 no.readonly = TRUE 查看可编辑的图标参数
+opar <- par(no.readonly = TRUE)
+# opar: Original params. 用它储存初始配置
+opar[1:2]
+```
+
+```{r change-params-of-graphs}
+# lty: change line type to dashed (=2), pch: change symbol to solid triangle (=17)
+par(lty=2, pch=17)
+plot(dose, drugA, type="b")
+# 恢复初始配置
+par(opar)
+```
+
+## Method 2: Send in Params Directly
+
+```{r set-graph-params-directly}
+plot(dose, drugA, type = "b", lty=2, pch=17)
+```
+
+## Lines and Symbols
+
+```{r tables-line-and-symbol ,echo=FALSE}
+line_and_symbel_table = data.frame(Parameter = c("pch", "cex", "lty", "lwd"), Description = c("点的样式", "点的大小倍数", "线的样式", "线的宽度倍数"))
+kable(line_and_symbel_table) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
+```
+
+## COLORS
+
+### Color Params in Graph
+
+* `col` 用于线图或饼图，可以传入向量，R 将循环使用其中的颜色
+* `col.axis` 轴文本
+* `col.lab` 轴标签
+* `col.main` 主标题
+* `col.sub` 副标题
+* `fg` 前景色
+* `bg` 背景色
+
+支持各种颜色格式：`col=1`, `col="white"`, `col="#FFFFFF"`, `col=rgb(1,1,1)` or `col=hsv(0,0,1)` is OK.
+
+### Colors in R
+
+* `colors()` 返回所有可用颜色名
+* `rainbow()`, `heat.colors()`, `terrain.colors`, `topo.colors()` and `cm.colors()` 可以生成系列色
+* `RColorBrewer` 包可以生成颜色
+
+#### Example 1: `raindow()`
+
+```{r r-color-example-1-rainbow}
+n <- 10
+mycolors <- rainbow(10)
+pie(rep(1, n), labels = mycolors, col = mycolors)
+```
+
+#### Example 2: `gray()`
+
+```{r r-color-example-2-gray}
+n <- 10
+mygrays <- gray(0:n/n)
+pie(rep(1, n), labels = mygrays, col = mygrays)
+```
+
+#### Example 3: RColorBrewer
+
+```{r r-color-brewer, warning = FALSE, fig.height=14}
+library(RColorBrewer)
+display.brewer.all()
+```
+
+```{r r-color-example-3-brewer}
+n <- 7
+mycolors <- brewer.pal(n, "RdYlGn")
+barplot(rep(1,n), col=mycolors)
+```
+
+## Text
+
+图表中的文字样式也可以进行类似配置。
+
+### Font Size
+
+* `cex` 基础文字大小倍数
+* `cex.axis` 轴文字字号倍数，相对 `cex`，下同
+* `cex.lab` 轴标签字号倍数
+* `cex.main` 主标题字号倍数
+* `cex.sub` 副标题字号倍数
+
+### Font Style and Font Family
+
+* `font` 基础文字粗细，=1 正常，=2 加粗，=3 意大利斜体，=4 粗斜体，=5点阵字体(Adobe)
+* `font.axis` 轴文字
+* `font.lab` 轴标签
+* `font.main` 主标题
+* `font.sub` 副标题
+* `ps` Font point size
+* `family` 
