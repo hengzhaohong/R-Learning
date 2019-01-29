@@ -4,7 +4,7 @@ Learn R while practicing.
 
 ## How to use
 
-Open HTML files (*.nb.html) in the root directory and enjoy reading.
+Open HTML files ( `*.nb.html` ) in the root directory and enjoy reading.
 
 ## Readings
 
