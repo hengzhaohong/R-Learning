@@ -1,0 +1,198 @@
+---
+title: "R Basic Data Management"
+output:
+  html_notebook:
+    code_folding: none
+    df_print: paged
+    number_sections: yes
+    theme: yeti
+    toc: yes
+---
+
+```{r include=FALSE}
+library(knitr)
+library(kableExtra)
+```
+
+# Data Management in a Real Case
+
+男性管理者和女性管理者在遵从上司的程度上有什么区别吗？
+
+这种区别在各个国家都不相同吗？或是这种区别是普遍的、无国别差异的？
+
+现在向各国老板们发放问卷，问卷中有5道类似这道题的程度题：
+
+**经理在作出个人决定的时候，一般会询问你的意见吗？**
+
+1. 绝对不会
+2. 不会
+3. 一般
+4. 会
+5. 绝对会
+
+**得到问卷数据：**
+
+```{r example-working-data, results='hide'}
+manager <- c(1, 2, 3, 4, 5)
+date <- c("10/24/08", "10/28/08", "10/1/08", "10/12/08", "5/1/09")
+country <- c("US", "US", "UK", "UK", "UK")
+gender <- c("M", "F", "F", "M", "F")
+age <- c(32, 45, 25, 39, 99)
+q1 <- c(5, 3, 3, 3, 2)
+q2 <- c(4, 5, 5, 3, 2)
+q3 <- c(5, 2, 5, 4, 1)
+q4 <- c(5, 5, 5, NA, 2)
+q5 <- c(5, 5, 2, NA, 1)
+leadership <- data.frame(manager, date, country, gender, age,
+q1, q2, q3, q4, q5, stringsAsFactors=FALSE)
+```
+
+```{r tables-leadership, echo=FALSE, results='asis'}
+kable(leadership) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"), full_width = T, position = "left")
+```
+
+几个启发性问题：
+
+* 应该根据 q1 - q5 计算出一个综合评估指标
+* 经理 4 的 q4 - q5 答案缺失；经理 5 的年龄缺失
+* 有些变量对研究目的来说是不需要的
+* 已有研究表明，经理行为是年龄的函数，所以可能需要根据年龄生成几个分类变量（较年轻、中年、较老）
+* 经理行为可能随时间改变，我们可能关注经济危机时期的经理服从程度，因而需要限制样本接受调查的时间
+* 如何排序、合并数据集？
+
+如何解决这些问题，就是本章内容。
+
+## Creating New Variables
+
+创建新变量语法规则如下：
+
+```{r grammer-new-var, eval=FALSE}
+variable <- expression
+```
+
+`expression` 里可以有很多计算，比如 R 的基础运算符：
+
+* `+ - * /` 加、减、乘、除
+* `^` 或 `**` 指数计算
+* `x%%y` 求余
+* `x%/%y` 整数除，向下取整，即不保留余数的除法
+
+以下逻辑运算符都返回 `TRUE` 或 `FALSE`：
+
+* `>=`、`<=`、`>`、`<`、`!=`、`==`
+* `!x` (not `x`)
+* `x | y` (或)、`x&y` (且)
+* `isTRUE(x)`(测试 `x` 是否为 `TRUE`)
+
+**使用 `$` 取到 `Dataframe` 中的变量**
+
+要新增或修改一个 `Dataframe` 内部的变量，有三种方法：
+
+* 使用 `$`
+* 使用 `attach()` 和 `detach()` 组合
+* **推荐**：使用 `teansform()` 方法，语法是 `transform(mydata, new_var_1=x1+x2, new_var_2=(x1+x2)/2)`
+
+## Recoding data
+
+我们想把年龄这个连续变量变为分类变量。
+
+筛选数据进行处理的基本语法：
+
+```{r eval=FALSE}
+variable[condition] <- expression
+```
+
+直观理解是，只有 `condition` 的条件为 `TRUE` 的数据才会被处理、更新。
+
+**首先，将缺失值标为缺失**
+
+```{r mark-na, results='hide'}
+leadership$age[leadership$age == 99] <- NA
+```
+
+处理结果：
+
+```{r tables-leadership-2, echo=FALSE, results='asis'}
+kable(leadership) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"), full_width = T, position = "left")
+```
+
+下面生成分类变量 `agecat`：
+
+```{r gen-agecat-basic, eval=FALSE}
+leadership$agecat[leadership$age > 75] <- "Elder"
+leadership$agecat[leadership$age >= 55 &
+leadership$age <= 75] <- "Middle Aged"
+leadership$agecat[leadership$age < 55] <- "Young"
+``` 
+
+更优雅的方式是使用 `within()` 方法，以下代码效果与上方完全相同：
+
+> `within()` 方法和调用 `Dataframe` 内变量的方法之一 `with()` 相似，但允许更新变量。
+
+```{r gen-agecat}
+leadership <- within(leadership, {
+  agecat <- NA
+  agecat[age > 75] <- "Elder"
+  agecat[age >= 55 & age <= 75] <- "Middle Aged"
+  agecat[age < 55] <- "Young"
+})
+```
+
+处理结果：
+
+```{r tables-leadership-3, echo=FALSE, results='asis'}
+kable(leadership) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"), full_width = T, position = "left")
+```
+
+其他一些有用的 recode 方法：
+
+* `car` 包里的 `recode()`，轻松 recode 数字型、字符型和因子变量（`factor`）
+* `doBy` 包里的 `recodeVar()`
+* R 自带的 `cut()`，它用于根据数字型变量的区间生成因子变量（`factor`）
+
+### Renaming Variables
+
+变量重命名的方法：
+
+* `fix()` 方法打开数据编辑器直接编辑，比如 `fix(leadership)`
+* 使用 `names()` 方法获取变量数组，再重命名变量，比如 `names(leadership)[2] <- "testDate`，将 `date` 重命名为 `testDate`
+* **使用 `plyr` 包的 `rename()` 方法**
+
+`rename()` 的基本语法：
+
+```{r grammer-rename, eval=FALSE}
+rename(dataframe, c(oldname="newname", oldname="newname",...))
+```
+
+**使用 `rename()` 重命名变量：**
+
+```{r install-plyr, eval=FALSE, echo=TRUE, message=FALSE, results='hide'}
+install.packages("plyr")
+```
+
+```{r rename-var}
+library(plyr)
+leadership <- rename(leadership,
+                     c(manager="managerID", date="testDate"))
+```
+
+处理结果：
+
+```{r tables-leadership-4, echo=FALSE, results='asis'}
+kable(leadership) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"), full_width = T, position = "left")
+```
+
+`plyr` 包提供了一套强大的数据分片、处理和整合工具，[官网见这里](http://had.co.nz/plyr).
+
+### To be Continued
+
+## Conclusion: Methods for Opeating a Dataframe
+
+已提及的更新 Dataframe 的方法汇总：
+
+* `transform()`
+* `within()`
