@@ -1,9 +1,9 @@
 ---
 title: "R Basic Data Management"
 output:
-  html_notebook:
+  html_document:
     code_folding: none
-    df_print: paged
+    df_print: kable
     number_sections: yes
     theme: yeti
     toc: yes

@@ -1,36 +1,36 @@
 @font-face {
-    font-family: 'sarasa-gothic-sc';
+    font-family: 'sarasa-gothic-sc-1';
     font-style: normal;
     font-weight: normal;
     src: local('☺'), 
-        url('../asset/fonts/sarasa-gothic-sc-regular.ttf') format('truetype');
+        url('./../asset/fonts/sarasa-gothic-sc-regular.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'sarasa-gothic-sc';
+    font-family: 'sarasa-gothic-sc-1';
     font-style: normal;
     font-weight: bold;
     src: local('☺'), 
-        url('../asset/fonts/sarasa-gothic-sc-regular-bold.ttf') format('truetype');
+        url('./../asset/fonts/sarasa-gothic-sc-regular-bold.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'sarasa-gothic-sc';
+    font-family: 'sarasa-gothic-sc-1';
     font-style: italic;
     font-weight: normal;
     src: local('☺'), 
-        url('../asset/fonts/sarasa-gothic-sc-regular-italic.ttf') format('truetype');
+        url('./../asset/fonts/sarasa-gothic-sc-regular-italic.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'sarasa-gothic-sc';
+    font-family: 'sarasa-gothic-sc-1';
     font-style: italic;
     font-weight: bold;
     src: local('☺'), 
-        url('../asset/fonts/sarasa-gothic-sc-regular-bolditalic.ttf') format('truetype');
+        url('./../asset/fonts/sarasa-gothic-sc-regular-bolditalic.ttf') format('truetype');
 }
 
 body {
-    font-family: "sarasa-gothic-sc",-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,
-        Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
+    font-family: "sarasa-gothic-sc-1",-apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,
+        Microsoft YaHei,WenQuanYi Micro Hei,sans-serif !important;
 }
