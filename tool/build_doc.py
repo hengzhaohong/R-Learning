@@ -42,7 +42,7 @@ if __name__ == '__main__':
             lines = f.readlines()
             for idx, line in enumerate(lines):
                 if line.strip().endswith(('</title>',)): # Windows CR/LF
-                    head_str='<link ref="stylesheet" type="text/css" href="../asset/css/r_notebook.css">\n'
+                    head_str='<link rel="stylesheet" href="../asset/css/r_notebook.css">\n'
                     lines.insert(idx + 1, head_str)
                     break
             target_name = os.path.split(f.name)[1]
