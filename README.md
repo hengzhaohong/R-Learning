@@ -4,7 +4,7 @@ Learn R while practicing.
 
 ## How to use
 
-Open links below, which renders R Notebook files ( `*.nb.html` ) in the project, and enjoy reading.
+Open links below, which renders R Markdown files ( `*.rmd` ) in the `source/` directory of the project, and enjoy reading.
 
 * [Chapter 3: R Basic Graphs](https://honghzh.github.io/R-Learning/r-basic-graph/)
 * [Chapter 4: Basic Data Management](https://honghzh.github.io/R-Learning/r-basic-data-management/)
