@@ -7,7 +7,7 @@ Learn R while practicing.
 Open links below, which renders R Markdown files ( `*.rmd` ) in the `source/` directory of the project, and enjoy reading.
 
 * [Chapter 3: R Basic Graphs](https://honghzh.github.io/R-Learning/03-r-basic-graphs/)
-* [Chapter 4: Basic Data Management](https://honghzh.github.io/R-Learning/r-basic-data-management/)
+* [Chapter 4: Basic Data Management](https://honghzh.github.io/R-Learning/04-r-basic-data-management/)
 
 ## Readings
 

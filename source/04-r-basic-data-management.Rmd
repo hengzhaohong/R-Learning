@@ -1,11 +1,10 @@
 ---
-title: "R Basic Data Management"
+title: "R 语言 - 基础数据管理"
 output:
   html_document:
     code_folding: none
     df_print: kable
     number_sections: yes
-    theme: yeti
     toc: yes
 ---
 
@@ -14,7 +13,7 @@ library(knitr)
 library(kableExtra)
 ```
 
-# Data Management in a Real Case
+# 研究高管的服从程度与高管特征之间的关系
 
 男性管理者和女性管理者在遵从上司的程度上有什么区别吗？
 
@@ -63,7 +62,7 @@ kable(leadership) %>%
 
 如何解决这些问题，就是本章内容。
 
-## Creating New Variables
+## 创建新变量
 
 创建新变量语法规则如下：
 
@@ -93,7 +92,7 @@ variable <- expression
 * 使用 `attach()` 和 `detach()` 组合
 * **推荐**：使用 `teansform()` 方法，语法是 `transform(mydata, new_var_1=x1+x2, new_var_2=(x1+x2)/2)`
 
-## Recoding data
+## 更改变量类型
 
 我们想把年龄这个连续变量变为分类变量。
 
@@ -153,7 +152,7 @@ kable(leadership) %>%
 * `doBy` 包里的 `recodeVar()`
 * R 自带的 `cut()`，它用于根据数字型变量的区间生成因子变量（`factor`）
 
-### Renaming Variables
+### 变量重命名
 
 变量重命名的方法：
 
@@ -188,9 +187,9 @@ kable(leadership) %>%
 
 `plyr` 包提供了一套强大的数据分片、处理和整合工具，[官网见这里](http://had.co.nz/plyr).
 
-### To be Continued
+### 未完待续
 
-## Conclusion: Methods for Opeating a Dataframe
+## 操作 Dataframe 的函数汇总
 
 已提及的更新 Dataframe 的方法汇总：
 

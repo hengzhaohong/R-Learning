@@ -21,9 +21,8 @@ def suffix_checker(*search_string):
         return True in map(file_name.endswith, ends)
     return checker
 
-def create_doc(file_name, lines):
-    name_without_ext = os.path.splitext(file_name)[0]
-    page_path = os.path.join(project_docs_dir, name_without_ext)
+def create_doc(file_name_without_ext, lines):
+    page_path = os.path.join(project_docs_dir, file_name_without_ext)
     if not os.path.exists(page_path):
         os.makedirs(page_path)
     with open(os.path.join(page_path, 'index.html'), 'w', encoding='utf-8') as f:
@@ -45,7 +44,8 @@ if __name__ == '__main__':
                     head_str='<link rel="stylesheet" href="../asset/css/r_notebook.css">\n'
                     lines.insert(idx + 1, head_str)
                     break
-            target_name = os.path.split(f.name)[1]
+            file_name = os.path.split(f.name)[1]
+            target_name = os.path.splitext(file_name)[0]
             print('[Creating doc] %s' % (target_name))
             create_doc(target_name, lines)
             print('[Successfully created doc] %s' % (target_name))
