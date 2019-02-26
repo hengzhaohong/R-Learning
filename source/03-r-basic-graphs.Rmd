@@ -1,5 +1,5 @@
 ---
-title: "R Basic Graphs"
+title: "R 语言绘图基础"
 output:
   html_document:
     code_folding: none
@@ -17,13 +17,13 @@ library("Formula")
 library("ggplot2")
 ```
 
-首先介绍 R 绘图的基本方法，随后讲解如何定制图表的各个元素（标题、轴、标签、刻度线、辅助线、图例等），最后关注如何定制一组图和混合图。
+首先介绍 R 语言绘图的基本方法，随后讲解如何定制图表的各个元素（标题、轴、标签、刻度线、辅助线、图例等），最后关注如何定制一组图和混合图。
 
-包含了几乎所有 R 绘图所需的一般知识，但不包含对 `ggplot2` （一个专业于绘图的 R 包）绘图的介绍。
+本章包含了几乎所有 R 绘图所需的一般知识，但不包含对 `ggplot2` （一个专业于绘图的 R 包）绘图的介绍。
 
 使用的 R 版本是 3.5.2
 
-# DATA SOURCE
+# 案例：评估药效
 
 研究病人对两种药物 A and B 的不同剂量的反应，首先生成数据：
 
@@ -40,9 +40,9 @@ kable(dose_table) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"), full_width = F, position = "left")
 ```
 
-# BASIC: DRAW AND SAVE
+# 基本方法
 
-## Draw a Graph
+## 生成图表
 
 绘制散点图并连线：
 
@@ -55,7 +55,7 @@ plot(dose, drugA, type="b")
 
 Use command `help(plot)` to learn more about `plot()`。
 
-## Save a Graph
+## 保存图表
 
 可以将图表保存为 PNG, JPEG, PDF, PSF 等格式。
 
@@ -66,9 +66,9 @@ pdf(file="my_plot.pdf")
 postscript(file = "my_plot.ps")
 ```
 
-# CONFIGURATION
+# 配置图表
 
-## Method 1: `par()`
+## 方法一: 使用 `par()` 函数
 
 使用 `par()` 查看和配置图表参数。
 
@@ -88,13 +88,13 @@ plot(dose, drugA, type="b")
 par(opar)
 ```
 
-## Method 2: Send in Params Directly
+## 方法二: 直接传参给绘图函数
 
 ```{r set-graph-params-directly}
 plot(dose, drugA, type = "b", lty=2, pch=17)
 ```
 
-## Lines and Symbols
+## 配置点和线
 
 ```{r tables-line-and-symbol ,echo=FALSE}
 line_and_symbel_table = data.frame(Parameter = c("pch", "cex", "lty", "lwd"), Description = c("点的样式", "点的大小倍数", "线的样式", "线的宽度倍数"))
@@ -102,9 +102,9 @@ kable(line_and_symbel_table) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
 ```
 
-## Colors
+## 配置颜色
 
-### Color Params in Graph
+### 与颜色有关的参数
 
 * `col` 用于线图或饼图，可以传入向量，R 将循环使用其中的颜色
 * `col.axis` 轴文本
@@ -116,13 +116,13 @@ kable(line_and_symbel_table) %>%
 
 支持各种颜色格式：`col=1`, `col="white"`, `col="#FFFFFF"`, `col=rgb(1,1,1)` or `col=hsv(0,0,1)` is OK.
 
-### Colors in R
+### 运用 R 语言生成颜色
 
 * `colors()` 返回所有可用颜色名
 * `rainbow()`, `heat.colors()`, `terrain.colors`, `topo.colors()` and `cm.colors()` 可以生成系列色
 * `RColorBrewer` 包可以生成颜色
 
-#### Example 1: `raindow()`
+#### 例 1: `raindow()` 函数
 
 ```{r r-color-example-1-rainbow}
 n <- 10
@@ -130,7 +130,7 @@ mycolors <- rainbow(10)
 pie(rep(1, n), labels = mycolors, col = mycolors)
 ```
 
-#### Example 2: `gray()`
+#### 例 2: `gray()` 函数
 
 ```{r r-color-example-2-gray}
 n <- 10
@@ -138,7 +138,7 @@ mygrays <- gray(0:n/n)
 pie(rep(1, n), labels = mygrays, col = mygrays)
 ```
 
-#### Example 3: RColorBrewer
+#### 例 3: RColorBrewer 包
 
 ```{r r-color-brewer, warning = FALSE, fig.height=14}
 library(RColorBrewer)
@@ -151,11 +151,11 @@ mycolors <- brewer.pal(n, "RdYlGn")
 barplot(rep(1,n), col=mycolors)
 ```
 
-## Text
+## 配置图中的文字
 
 图表中的文字样式也可以进行类似配置。
 
-### Font Size
+### 字号
 
 在 `par()` 中传入以下参数和值，或直接传入绘图方法中。
 
@@ -165,7 +165,7 @@ barplot(rep(1,n), col=mycolors)
 * `cex.main` 主标题字号倍数
 * `cex.sub` 副标题字号倍数
 
-### Font Style
+### 粗细
 
 * `font` 基础文字粗细，=1 正常，=2 加粗，=3 意大利斜体，=4 粗斜体，=5点阵字体 (Adobe)
 * `font.axis` 轴文字
@@ -174,7 +174,7 @@ barplot(rep(1,n), col=mycolors)
 * `font.sub` 副标题
 * `ps` Font point size
 
-### Font Family
+### 字体
 
 * `family` 字体
 
@@ -211,7 +211,7 @@ names(postscriptFonts())
 postscript(file = "myplot.ps", family = "fontname")
 ```
 
-## Height, Width and Margin
+## 配置长、高与边距
 
 * `pin` 传入向量，分别为宽和高
 * `mai` margin，图表的外边距，单位是 inches，顺序是 `c(bottom, left, top, right)`
@@ -222,7 +222,7 @@ postscript(file = "myplot.ps", family = "fontname")
 par(pin = c(4,3), mai = c(1, .5, 1, .2))
 ```
 
-## Mixed Example
+## 综合例子 1：分别展示两种药的药效
 
 配置：
 
@@ -251,7 +251,7 @@ plot(dose, drugB, type="b", pch=23, lty=6, col="blue", bg="green")
 par(opar)
 ```
 
-## More Detailed Configurations
+## 配置图表（进阶）
 
 往 `plot()` 中传入更多参数，可以更好地定制图表。
 
@@ -274,7 +274,7 @@ plot(dose, drugA, type="b",
 
 并不是所有绘图函数都支持这些参数，需要参考 `help()`。
 
-### Title
+### 配置标题
 
 使用 `title()` 定制标题，基本语法是：
 
@@ -294,7 +294,7 @@ xlab="My X label", ylab="My Y label",
 col.lab="green", cex.lab=0.75)
 ```
 
-### Axes
+### 配置坐标轴
 
 使用 `axis()` 方法定制坐标轴，基本语法是：
 
@@ -345,7 +345,7 @@ par(opar)
 
 添加无标签的“小刻度”需要 `Hmisc` 包的 `minor.tick()` 方法，例子见下一小节的示例图。
 
-### Reference Lines
+### 作辅助线
 
 使用 `abline(h=yvalues, v=xvalues)` 添加辅助线.
 
@@ -361,7 +361,7 @@ abline(h=c(1,5,7))
 abline(v=seq(1, 10, 2), lty=2, col="blue")
 ```
 
-### Legend
+### 配置图例
 
 使用 `legend()` 方法配置图例和其样式。
 
@@ -382,7 +382,7 @@ legend(location, title, legend, ...)
 
 See `help(legend)` for more details.
 
-### Legend Example
+### 综合例子 2：比较药效
 
 对比药物 A 和药物 B 的药效。
 
@@ -409,7 +409,7 @@ legend("topleft", inset=.05, title="Drug Type", c("A","B"),
 par(opar)
 ```
 
-### Text Annotations
+### 添加文字注解
 
 使用 `text()` 或 `mtext()` 为图表添加文字。
 
@@ -451,15 +451,15 @@ text(5,5,family="serif","Example of serif text")
 par(opar)
 ```
 
-### Math Annotations
+### 添加数学表达式注解
 
 可以往图表中添加数学表达式，规则见 `help(plotmath)`.
 
 使用 `plotmath()` 方法可以向图表的组件或在图中添加数学公式。
 
-# MULTIPLE GRAPHS
+# 生成组图
 
-## Grouped Graphs
+## 混合多张图表
 
 使用 `par()` 或 `layout()` 方法可以混合图表。
 
@@ -467,7 +467,7 @@ par(opar)
     + `mfrow=c(nrows, ncols)` 按行排列，生成 nrow 行 nrow 列的图表阵列
     + `mfcol=c(nrows, ncols)` 按列排列
 
-### `par()`
+### 使用 `par()` 函数
 
 例子：
 
@@ -485,7 +485,7 @@ detach(mtcars)
 
 注意上述代码中 `hist()` 方法，即使不传入 `main` 参数，图的默认标题也会是 "Histagram of xxx".
 
-### `layout()`
+### 使用 `layout()` 函数
 
 `layout` 接收一个矩阵 (*matrix*)，根据**矩阵规模**和矩阵内的**数字**来排列图表。
 
@@ -521,7 +521,7 @@ detach(mtcars)
 
 See `help(layout)` for more details.
 
-## One Single Graph Combining Graphs
+## 定制一张高级混合图
 
 使用图表配置参数 `fig` 将多个图合并到同一张图里，定制更高级的图表。
 
@@ -549,7 +549,7 @@ mtext("Enhanced Scatterplot", side=3, outer=TRUE, line=-3)
 par(opar)
 ```
 
-**为什么箱线图和点阵图`fig`参数里，向量的横纵坐标参数加起来超过了 1 ？**
+**为什么箱线图和点阵图`fig`参数里向量的横纵坐标参数加起来超过了 1 ？**
 
 因为向量参数 `c(x1,x2,y1,y2)` 是指示一个绘图范围，所以允许重合。
 
