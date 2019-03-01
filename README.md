@@ -2,6 +2,8 @@
 
 Learn R while practicing.
 
+这是一边学习 R 语言，一边进行的知识输出。
+
 ## How to use
 
 Open links below, which renders R Markdown files ( `*.rmd` ) in the `source/` directory of the project, and enjoy reading.
